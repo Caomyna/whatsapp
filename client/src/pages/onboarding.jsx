@@ -18,7 +18,7 @@ function onboarding() {
   useEffect(() => {
     if (!newUser && !userInfo?.email) router.push("/login");
     else if (!newUser && userInfo?.email) router.push("/");
-  }, [newUser, userInfo, router])
+  }, [newUser, userInfo, router]);
 
   const onboardUserHandler = async () => {
     if (validateDetails()) {
@@ -31,7 +31,7 @@ function onboarding() {
           image,
         });
 
-        console.log({ data });
+        // console.log({ data });
 
         if (data.status) {
           dispatch({
@@ -40,14 +40,14 @@ function onboarding() {
           dispatch({
             type: reducerCases.SET_USER_INFO,
             userInfo: {
-              id: data.id,
+              id: data.user.id,
               name,
               email,
               profileImage: image,
               status: about,
             },
           });
-          router.push("/")
+          router.push("/");
         }
 
       } catch (err) {
