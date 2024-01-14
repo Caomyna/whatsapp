@@ -9,7 +9,7 @@ export const checkUser = async (req, res, next) => {
     const prisma = getPrismaInstance();
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      console.log({email});
+      console.log({ email });
       return res.json({ msg: "User not found", status: false });
     }
     else {
@@ -33,5 +33,33 @@ export const onBoardUser = async (req, res, next) => {
     return res.json({ msg: "Success", status: true, user });
   } catch (error) {
 
+  }
+}
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const prisma = getPrismaInstance();
+    const users = await prisma.user.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        profilePicture: true,
+        about: true,
+      },
+    });
+    const usersGroupedByInitialLetter = {};
+
+    users.forEach((user) => {
+      const initialLetter = user.name.charAt(0).toUpperCase();
+      if (!usersGroupedByInitialLetter[initialLetter]) {
+        usersGroupedByInitialLetter[initialLetter] = [];
+      }
+      usersGroupedByInitialLetter[initialLetter].push(user);
+    });
+    return res.status(200).send({ users: usersGroupedByInitialLetter });
+  } catch (error) {
+    next(error);
   }
 }
