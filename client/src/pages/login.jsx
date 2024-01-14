@@ -12,7 +12,7 @@ import { FcGoogle } from 'react-icons/fc';
 function login() {
   const router = useRouter();
 
-  const [{}, dispatch] = useStateProvider();
+  const [{ }, dispatch] = useStateProvider();
 
 
   const handleLogin = async () => {
@@ -37,6 +37,18 @@ function login() {
             },
           });
           router.push("/onboarding");
+        } else {
+          const {id, name, email, profilePicture: profileImage, status} = data;
+          dispatch({
+            type: reducerCases.SET_USER_INFO,
+            userInfo: {
+              id,
+              name,
+              email,
+              profileImage,
+              status,
+            },
+          });
         }
       }
     } catch (err) {
