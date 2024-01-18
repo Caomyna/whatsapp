@@ -3,20 +3,23 @@ import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 
-function ChatLIstItem({ data, isContactPage = false }) {
-  const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
-  const handleContactClick = () =>{
-    // if (currentChatUser?.id===data?.id) {
-      dispatch({type: reducerCases.CHANGE_CURRENT_CHAT_USER, user:{...data}});
-      dispatch({type: reducerCases.SET_ALL_CONTACTS_PAGE});
+function ChatLIstItem({ data, isContactsPage = false }) {
+  const [{ userInfo, currentChatUser }, dispatch] = useStateProvider();
+  const handleContactClick = () => {
+    // if (currentChatUser?.id === data?.id) {
+    dispatch({
+      type: reducerCases.CHANGE_CURRENT_CHAT_USER,
+      user: { ...data },
+    });
+    dispatch({ type: reducerCases.SET_ALL_CONTACTS_PAGE });
     // }
-  }
+  };
   return (
-    <div 
-      className="flex cursor-pointer items-center hover:bg-background-default-hover"
+    <div
+      className={`flex cursor-pointer items-center hover:bg-background-default-hover`}
       onClick={handleContactClick}
-      >
-      <div className="main-w-fit px-5 pt-3 pb-1">
+    >
+      <div className="min-w-fit px-5 pt-3 pb-1">
         <Avatar type="lg" image={data?.profilePicture} />
       </div>
       <div className="min-h-full flex flex-col justify-center mt-3 pr-2 w-full">
@@ -25,8 +28,7 @@ function ChatLIstItem({ data, isContactPage = false }) {
             <span className="text-white">{data?.name}</span>
           </div>
         </div>
-
-        <div className="felx border-b border-conversation-border pb-2 pt-1 p3-2">
+        <div className="flex border-b border-conversation-border pb-2 pt-1 p3-2">
           <div className="flex justify-between w-full">
             <span className="text-secondary line-clamp-1 text-sm">
               {data?.about || "\u00A0"}

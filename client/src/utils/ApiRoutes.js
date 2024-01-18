@@ -9,3 +9,6 @@ export const GET_ALL_CONTACTS = `${AUTH_ROUTE}/get-contacts`;
 
 export const ADD_MESSAGE_ROUTE = `${MESSAGES_ROUTE}/add-message`;
 export const GET_MESSAGES_ROUTE = `${MESSAGES_ROUTE}/get-messages`;
+export const ADD_IMAGE_MESSAGES_ROUTE = `${MESSAGES_ROUTE}/add-image-message`;
+export const ADD_AUDIO_MESSAGES_ROUTE = `${MESSAGES_ROUTE}/add-audio-message`;
+export const GET_INITIAL_CONTACTS_ROUTE = `${MESSAGES_ROUTE}/get-initial-contacts`;

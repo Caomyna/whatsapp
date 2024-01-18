@@ -85,7 +85,7 @@ function Avatar({ type, image, setImage }) {
       console.log(data.src);
       setImage(data.src);
     }, 100);
-  }
+  };
 
   return (
     <>
