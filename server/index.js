@@ -27,13 +27,24 @@ const io = new Server(server, {
     },
 });
 
-// duy trì trực tuyến ngoại tuyến
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
     global.chatSocket = socket;
+
     socket.on("add-user", (userId) => {
         onlineUsers.set(userId, socket.id);
+        socket.broadcast.emit("online-users", {
+            onlineUsers: Array.from(onlineUsers.keys()),
+        });
     });
+
+    socket.on("signout", (id) => {
+        onlineUsers.delete(id);
+        socket.broadcast.emit("online-users", {
+            onlineUsers: Array.from(onlineUsers.keys()),
+        });
+    });
+
     socket.on("send-msg", (data) => {
         const sendUserSocket = onlineUsers.get(data.to);
         if (sendUserSocket) {
@@ -48,7 +59,7 @@ io.on("connection", (socket) => {
         const sendUserSocket = onlineUsers.get(data.to);
         console.log("outgoingcall", data, sendUserSocket);
         if (sendUserSocket) {
-            socket.to(sendUserSocket).emit("incoming-voice-call",{
+            socket.to(sendUserSocket).emit("incoming-voice-call", {
                 from: data.from,
                 roomId: data.roomId,
                 callType: data.callType,
@@ -60,7 +71,7 @@ io.on("connection", (socket) => {
         const sendUserSocket = onlineUsers.get(data.to);
         console.log("outgoingcall", data, sendUserSocket);
         if (sendUserSocket) {
-            socket.to(sendUserSocket).emit("incoming-video-call",{
+            socket.to(sendUserSocket).emit("incoming-video-call", {
                 from: data.from,
                 roomId: data.roomId,
                 callType: data.callType,
@@ -70,19 +81,19 @@ io.on("connection", (socket) => {
 
     socket.on("reject-voice-call", (data) => {
         const sendUserSocket = onlineUsers.get(data.from);
-        if(sendUserSocket){
+        if (sendUserSocket) {
             socket.to(sendUserSocket).emit("voice-call-rejected");
         }
     });
 
     socket.on("reject-video-call", (data) => {
         const sendUserSocket = onlineUsers.get(data.from);
-        if(sendUserSocket){
+        if (sendUserSocket) {
             socket.to(sendUserSocket).emit("video-call-rejected");
         }
     });
 
-    socket.on("accept-incoming-call", ({id})=>{
+    socket.on("accept-incoming-call", ({ id }) => {
         const sendUserSocket = onlineUsers.get(id);
         socket.to(sendUserSocket).emit("accept-call")
     });
